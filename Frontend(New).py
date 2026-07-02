@@ -3,6 +3,16 @@ from tkinter import messagebox, ttk
 
 import Backend
 
+
+# Function Refresh
+def muat_tabel_gui():
+    for item in list_kontak.get_children():
+        list_kontak.delete(item)
+
+    for kontak in Backend.daftar_kontak:
+        list_kontak.insert("", tk.END, values=(kontak["Nama"], kontak["Nomor"]))
+
+
 # Window
 window = tk.Tk()
 window.title("Kontakku V0.1")
@@ -45,7 +55,19 @@ def tambah_kontak_gui():
     if nama == "" or nomor == "":
         messagebox.showerror(title="Error", message="Harus di Isi")
         return
-    list_kontak.insert("", tk.END, values=(nama, nomor))
+
+    respon = Backend.tambah_kontak(nama, nomor)
+
+    if respon == "Kontak Berhasil dimasukkan":
+        muat_tabel_gui()
+        messagebox.showinfo(
+            title="Info Mas`e", message="Berhasil dimasukkan ke Kontakku"
+        )
+    else:
+        messagebox.showerror(title="Failed", message=respon)
+
+    muat_tabel_gui()
+
     input_nama.delete(0, tk.END)
     input_nomor.delete(0, tk.END)
 
@@ -66,7 +88,19 @@ def hapus_kontak_gui():
             title="Warning", message="Pilih Kontak yang ingin dihapus"
         )
         return
-    list_kontak.delete(item_terpilih)
+
+    target_item = item_terpilih[0]
+    indeks_angka = list_kontak.index(target_item)
+
+    respon = Backend.hapus_kontak(indeks_angka)
+
+    if respon == "Kontak Berhasildi hapus":
+        muat_tabel_gui()
+        messagebox.showinfo(title="Sukses", message=respon)
+    else:
+        messagebox.showerror(title="Gagal", message=respon)
+
+    muat_tabel_gui()
 
 
 # Button Hapus Kontak
@@ -75,4 +109,27 @@ button_hapus = ttk.Button(
 )
 button_hapus.grid(row=5, column=0, pady=5, padx=10)
 
+# Function Search Kontak
+
+def search_kontak_gui():
+    kata_kunci = input_cari.get()
+
+    if kata_kunci == "":
+        messagebox.showerror(title="Error", message="Harus Masukkan Kontak yang dicari")
+        return
+
+    hasil = Backend.search_kontak(kata_kunci)
+
+    for item in list_kontak.get_children():
+        list_kontak.delete(item)
+    for hasil in
+        hasil.insert("", tk.END, values=(kontak["Nama"],kontak["Nomor"]))
+
+def reset_cari_gui():
+    input_cari
+
+
+
+
+muat_tabel_gui()
 window.mainloop()
