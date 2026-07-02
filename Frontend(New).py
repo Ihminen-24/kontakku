@@ -37,11 +37,13 @@ input_nama = ttk.Entry(frame_kiri)
 input_nama.grid(row=1, column=0, pady=5, padx=10)
 input_nomor = ttk.Entry(frame_kiri)
 input_nomor.grid(row=3, column=0, pady=5, padx=10)
+input_cari = ttk.Entry(frame_kanan)
+input_cari.grid(row=0, column=0, pady=5, padx=10)
 # Treeview
 list_kontak = ttk.Treeview(frame_kanan, columns=("Nama", "Nomor"))
 list_kontak.heading("Nama", text="Nama Kontak")
 list_kontak.heading("Nomor", text="Nomor Kontak")
-list_kontak.grid(row=0, column=0, padx=10, pady=10)
+list_kontak.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
 list_kontak.column("#0", width=0, stretch=False)
 list_kontak.column("Nama", width=150)
 list_kontak.column("Nomor", width=150)
@@ -94,7 +96,7 @@ def hapus_kontak_gui():
 
     respon = Backend.hapus_kontak(indeks_angka)
 
-    if respon == "Kontak Berhasildi hapus":
+    if respon == "Kontak Berhasil di hapus":
         muat_tabel_gui()
         messagebox.showinfo(title="Sukses", message=respon)
     else:
@@ -109,8 +111,8 @@ button_hapus = ttk.Button(
 )
 button_hapus.grid(row=5, column=0, pady=5, padx=10)
 
-# Function Search Kontak
 
+# Function Search Kontak
 def search_kontak_gui():
     kata_kunci = input_cari.get()
 
@@ -122,14 +124,24 @@ def search_kontak_gui():
 
     for item in list_kontak.get_children():
         list_kontak.delete(item)
-    for hasil in
-        hasil.insert("", tk.END, values=(kontak["Nama"],kontak["Nomor"]))
+    for kontak in hasil:
+        list_kontak.insert("", tk.END, values=(kontak["Nama"], kontak["Nomor"]))
 
+
+# Button Search
+button_cari = ttk.Button(frame_kanan, text="Cari Kontak", command=search_kontak_gui)
+button_cari.grid(row=0, column=1, padx=5)
+
+
+# Function Reset
 def reset_cari_gui():
-    input_cari
+    input_cari.delete(0, tk.END)
+    muat_tabel_gui()
 
 
-
+# Button Reset
+button_reset = ttk.Button(frame_kanan, text="Refresh", command=reset_cari_gui)
+button_reset.grid(row=2, column=2, padx=5)
 
 muat_tabel_gui()
 window.mainloop()
